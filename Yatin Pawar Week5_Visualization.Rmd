@@ -1,0 +1,88 @@
+---
+title: "Week 5 Visualization Activity"
+author: "Yatin Pawar"
+date: "11/19/2021"
+output: html_document
+---
+
+## Understanding data in detail:
+
+```{r setup, include=FALSE}
+#Next line url is to get the data from GitHub to R Studio wd.
+#using read.csv to read data from csv file
+url <- "https://raw.githubusercontent.com/fivethirtyeight/data/master/airline-safety/airline-safety.csv"
+
+airline_safety <- read.csv(url)
+
+#Need to install below libraries to run the functions within them.
+library(tidyverse)
+library(knitr)
+library(ggplot2)
+
+#Renaming better column names
+names(airline_safety)[3]<-"Incidents_1985_99"
+names(airline_safety)[4]<-"Fatal_Accidents_1985_99"
+names(airline_safety)[5]<-"Fatalities_1985_99"
+names(airline_safety)[6]<-"Incidents_2000_14"
+names(airline_safety)[7]<-"Fatal_Accidents_2000_14"
+names(airline_safety)[8]<-"Fatalities_2000_14"
+
+```
+
+Barplot:
+
+Let's see what data tells us about Incidents reported for each airline for the period of 1984-99 and 2000-14 with help of below bar plot: 
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(tidyverse)
+library(knitr)
+
+#Plotting a bar chart with two variables for each airline
+# Increase margin size
+par(mar=c(11,4,4,4))
+
+#Plotting the graph to compare the Incident per Airline for two time periods 1985-99 and 2000-14
+barplot(airline_safety$`Incidents_1985_99`, airline_safety$`Incidents_2000_14`, 
+        main="Comparison of Incidents per Airline", 
+        xlab="", 
+        col=c("darkblue","red"), 
+        beside=TRUE, 
+        names.arg = airline_safety$airline, 
+        ylim=c(0,80),
+        las=2,
+        cex.names = 0.65,
+        width=0.25,
+        space=0.25,
+        legend = FALSE,
+        )
+#Plotting legend
+legend("topright", legend = c("Incidents_1985_99","Incidents_2000_14"),
+       col=c("darkblue","red"),
+       bty="n",
+       pch = 20,
+       pt.cex=2,
+       cex=1,
+       horiz=TRUE,
+       inset = c(0.05,0.05)
+       )
+
+#knitr::kable(head(col_desc_airline_safety[, 1:2]), "simple")
+```
+
+Scatterplot:
+
+And now we will see how the fatalities looks like for the period of 1985-99 and 2000-14 using scatter plot. Data points in top right and bottom right are the airlines still vulnerable:
+
+
+```{r echo=FALSE}
+# Plotting a scatterplot to compare Fatalities of 1985-99 and 2000-14
+ggplot(data = airline_safety, aes(x = Fatalities_1985_99, y = Fatalities_2000_14, color)) +
+geom_point()+
+  labs(title = "Fatalities comparison 1985-99 and 2000-14")
+
+```
+
